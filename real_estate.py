@@ -8,6 +8,7 @@ import plotly.express as px
 import streamlit as st
 import numpy as np
 import plotly as plt
+import plotly.graph_objects as go
 
 
 with open("allListings3.obj", "rb") as f:
@@ -51,29 +52,54 @@ if len(selected) > 0:
     plot_bgcolor='white')
     st.write(fig)
 
-    # Group by city and date and get the average sale price
-    sold_prices_by_city_month = df.groupby(['City','Sold Date'])['Sold Price'].mean()
+    # Group by city and date and get the median sale price
+    sold_prices_by_city_month = df.groupby(['City','Sold Date'])['Sold Price'].median()
     cities = [o[0] for o in sold_prices_by_city_month.index]
     dates = [o[1] for o in sold_prices_by_city_month.index]
     dff = pd.DataFrame()
-    dff["Average Sale Price"] = sold_prices_by_city_month
+    dff["Median Sale Price"] = sold_prices_by_city_month
     dff['City'] = cities
     dff['Date'] = dates
 
-    # Line Chart: Date vs average Sale price
-    fig = px.line(dff, x="Date", y="Average Sale Price", color="City")
+    # Line Chart: Date vs Median Sale price
+    fig = px.line(dff, x="Date", y="Median Sale Price", color="City", title="Median Sale Price Over Time")
     fig.update_xaxes(
-    rangeslider_visible=True,
-    rangeselector=dict(
-        buttons=list([
-            dict(count=1, label="1m", step="month", stepmode="backward"),
-            dict(count=3, label="3m", step="month", stepmode="backward"),
-            dict(count=6, label="6m", step="month", stepmode="backward"),
-            dict(step="all")
-        ])
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=3, label="3m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(step="all")
+            ])
+        )
     )
-)
     st.write(fig)
+
+    # Median Price vs City
+    city_df = df.groupby(['City'])['Sold Price'].median()
+    fig = px.bar(city_df, x=city_df.index, y="Sold Price", color=city_df.index,
+        title="Median Sale Price per City", labels={
+            "x": "City",
+            "Sold Price": "Median Sale Price"
+        })
+    st.write(fig)
+
+    # Median Price vs Building Type
+    dff = pd.DataFrame()
+    sold_price_by_building = df.groupby(['City', 'Building Type'])['Sold Price'].median()
+    dff["Median Sale Price"] = sold_price_by_building
+    dff["City"] = [o[0] for o in sold_price_by_building.index]
+    dff["Building Type"] = [o[1] for o in sold_price_by_building.index]
+    fig = px.bar(dff, x="Building Type", y="Median Sale Price",
+         color="City", barmode="group", title="Median Sale Price by Building Type")
+    st.write(fig)
+
+    # Number of Units sold
+    sold_count_df = pd.DataFrame()
+    
+
+
 hide_streamlit_style = """
         <style>
         #MainMenu {visibility: hidden;}
