@@ -5,7 +5,7 @@
 
 ![scatter](img/scatter.png)
 
-![title_map](img/title_map.png)
+![title_map](img/box_plot_line.png)
 
 ## Config
 
