@@ -1,7 +1,7 @@
 
 # 2020 Real Estate Sale Data Visualizations (Ontario, Canada)
 
-# Config
+## Config
 
 make sure you have streamlit plotly and pandas installed ```pip install -r requirements.txt```
 
