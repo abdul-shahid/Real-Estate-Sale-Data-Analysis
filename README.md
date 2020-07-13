@@ -9,6 +9,8 @@ Interactive plots in python of data found on various websites using selenium and
 
 ![bar](img/bar.png)
 
+![sold](img/sold.png)
+
 ## Config
 
 make sure you have streamlit plotly and pandas installed ```pip install -r requirements.txt```

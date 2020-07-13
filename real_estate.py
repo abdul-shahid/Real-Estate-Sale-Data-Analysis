@@ -97,9 +97,11 @@ if len(selected) > 0:
 
     # Number of Units sold
     sold_count_df = pd.DataFrame()
-    
+    fig = px.histogram(df, x="City", color="City", title="Units Sold per City")
+    st.write(fig)
 
 
+# Hide streamlit menu
 hide_streamlit_style = """
         <style>
         #MainMenu {visibility: hidden;}
